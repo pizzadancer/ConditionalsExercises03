@@ -22,42 +22,62 @@ f) Otherwise, print "Fuel and engine status pending..." */
 
 // Code 5a - 5f hered
 
-
-
-function launchCheck (fuelLevel, engineTemperature, engineIndicatorLight, overrideActivated) {
-  if (overrideActivated) {
-    console.log("launch!!!");
+function getLaunchSysMessage(fuelLevel, engineTemperature, engineIndicatorLight) {
+  if (fuelLevel < 1000 || engineTemperature > 3500 || engineIndicatorLight === "red blinking") {
+    return "ENGINE FAILURE IMMINENT!";
+  } else if (fuelLevel > 20000 && engineTemperature <= 2500) {
+    return "Full tank. Engines good.";
+  } else if (fuelLevel > 10000 && engineTemperature <= 2500) {
+    return "Fuel level above 50%. Engines good.";
+  } else if (fuelLevel > 5000 && engineTemperature <= 2500) {
+    return "Fuel level above 25%. Engines good.";
+  } else if (fuelLevel <= 5000 && fuelLevel >= 1000 || engineTemperature > 2500) {
+    return "Check fuel level. Engines running hot.";
   } else {
-    if (fuelLevel < 1000 || engineTemperature > 3500 || engineIndicatorLight === "red blinking") {
-      return "ENGINE FAILURE IMMINENT!";
-    } else if (fuelLevel > 20000 && engineTemperature <= 2500) {
-      return "Full tank. Engines good.";
-    } else if (fuelLevel > 10000 && engineTemperature <= 2500) {
-      return "Fuel level above 50%. Engines good.";
-    } else if (fuelLevel > 5000 && engineTemperature <= 2500) {
-      return "Fuel level above 25%. Engines good.";
-    } else if (fuelLevel <= 5000 && fuelLevel >= 1000 || engineTemperature > 2500) {
-      return "Check fuel level. Engines running hot.";
-    } else {
-      return "Fuel and engine status pending...";
-    }
+    return "Fuel and engine status pending...";
   }
 }
+
+
+function getLaunchStatus(overrideActivated) {
+  if (overrideActivated) {
+    return "launch!!!";
+  } else {
+    launchSysMessage = getLaunchSysMessage(fuelLevel, engineTemperature, engineIndicatorLight);
+    if launchSysMessage === "Check fuel level. Engines running hot." {
+      return "launch!!!";
+
+    }
+  }
+} 
 
 // 6) a) Create the variable commandOverride, and set it to be true or false. If commandOverride is false, then the shuttle should only launch if the fuel and engine check are OK. If commandOverride is true, then the shuttle will launch regardless of the fuel and engine status.
 
 // main
 console.log("Launch Check Program Activated!!!");
-let cmdOverrideChoice = input.question("Do you want to activate command overide? ")
-if cmdOverrideChoice {
-  launchStatus = launchCheck(fuelLevel, engineTemperature, engineIndicatorLight, true);
+let cmdOverrideChoice = input.question("Do you want to activate command overide? ").toLowerCase();
+// console.log(cmdOverrideChoice)
+
+if (cmdOverrideChoice === "yes") {
+  // console.log("yes");
+  launchStatus = getLaunchStatus(true);
 } else {
-  launchStatus = launchCheck(fuelLevel, engineTemperature, engineIndicatorLight, false);
+  // console.log("no");
+  launchStatus = getLaunchStatus(false);
 }
 // launchStatus = launchCheck(fuelLevel, engineTemperature, engineIndicatorLight);
 
-console.log(launchStatus)
+console.log(launchStatus);
 // next, We need to figure out how to encapsulate this into an if statement for overrides
+
+
+
+
+
+
+
+
+
 
 
 // if commandOverride === false {
