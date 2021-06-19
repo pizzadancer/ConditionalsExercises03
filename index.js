@@ -3,7 +3,7 @@ let engineIndicatorLight = 'green blinking';
 let fuelLevel = 18000;
 let engineTemperature = 2500;
 let commandOverride;
-
+let launchStatus;
 
 
 /* 5) Implement the following checks using if/else if/else statements:
@@ -24,27 +24,39 @@ f) Otherwise, print "Fuel and engine status pending..." */
 
 
 
-function launchCheck(fuelLevel, engineTemperature, engineIndicatorLight) {
-  if (fuelLevel < 1000 || engineTemperature > 3500 || engineIndicatorLight === "red blinking") {
-    console.log("ENGINE FAILURE IMMINENT!");
-  } else if (fuelLevel > 20000 && engineTemperature <= 2500) {
-    console.log("Full tank. Engines good.");
-  } else if (fuelLevel > 10000 && engineTemperature <= 2500) {
-    console.log("Fuel level above 50%. Engines good.");
-  } else if (fuelLevel > 5000 && engineTemperature <= 2500) {
-    console.log("Fuel level above 25%. Engines good.");
-  } else if (fuelLevel <= 5000 && fuelLevel >= 1000 || engineTemperature > 2500) {
-    console.log("Check fuel level. Engines running hot.");
+function launchCheck (fuelLevel, engineTemperature, engineIndicatorLight, overrideActivated) {
+  if (overrideActivated) {
+    console.log("launch!!!");
   } else {
-    console.log("Fuel and engine status pending...");
+    if (fuelLevel < 1000 || engineTemperature > 3500 || engineIndicatorLight === "red blinking") {
+      return "ENGINE FAILURE IMMINENT!";
+    } else if (fuelLevel > 20000 && engineTemperature <= 2500) {
+      return "Full tank. Engines good.";
+    } else if (fuelLevel > 10000 && engineTemperature <= 2500) {
+      return "Fuel level above 50%. Engines good.";
+    } else if (fuelLevel > 5000 && engineTemperature <= 2500) {
+      return "Fuel level above 25%. Engines good.";
+    } else if (fuelLevel <= 5000 && fuelLevel >= 1000 || engineTemperature > 2500) {
+      return "Check fuel level. Engines running hot.";
+    } else {
+      return "Fuel and engine status pending...";
+    }
   }
 }
 
 // 6) a) Create the variable commandOverride, and set it to be true or false. If commandOverride is false, then the shuttle should only launch if the fuel and engine check are OK. If commandOverride is true, then the shuttle will launch regardless of the fuel and engine status.
 
 // main
+console.log("Launch Check Program Activated!!!");
+let cmdOverrideChoice = input.question("Do you want to activate command overide? ")
+if cmdOverrideChoice {
+  launchStatus = launchCheck(fuelLevel, engineTemperature, engineIndicatorLight, true);
+} else {
+  launchStatus = launchCheck(fuelLevel, engineTemperature, engineIndicatorLight, false);
+}
+// launchStatus = launchCheck(fuelLevel, engineTemperature, engineIndicatorLight);
 
-launchCheck(fuelLevel, engineTemperature, engineIndicatorLight);
+console.log(launchStatus)
 // next, We need to figure out how to encapsulate this into an if statement for overrides
 
 
