@@ -76,14 +76,20 @@ console.log(launchStatus);
 
 
 
+/*
+
+//// NEW PROGRAM BUILD BLUEPRINT \\\\
+
+command console boot
+cmd con welcome msg
+insert override key? y/n
+init launch(key = y/n)
+	only launch if engine === OK || OVERRIDE
+	also need to print message either way
+
+*/
 
 
-
-
-// if commandOverride === false {
-//  // only launch if fuel and engine are ok
-// }elsif true
-//   // launch whenever
 
 
 /* 6) b) Code the following if/else check:
