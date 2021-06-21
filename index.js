@@ -1,27 +1,12 @@
 const input = require('readline-sync');
-let engineIndicatorLight = 'green blinking';
-let fuelLevel = 18000;
-let engineTemperature = 2500;
+let engineIndicatorLight = 'red blinking';
+let fuelLevel = 20001;
+let engineTemperature = 3444;
 let commandOverride;
-let launchStatus;
 
 
-/* 5) Implement the following checks using if/else if/else statements:
 
-a) If fuelLevel is above 20000 AND engineTemperature is at or below 2500, print "Full tank. Engines good."
-
-b) If fuelLevel is above 10000 AND engineTemperature is at or below 2500, print "Fuel level above 50%.  Engines good."
-
-c) If fuelLevel is above 5000 AND engineTemperature is at or below 2500, print "Fuel level above 25%. Engines good."
-
-d) If fuelLevel is at or below 5000 OR engineTemperature is above 2500, print "Check fuel level. Engines running hot."
-
-e) If fuelLevel is below 1000 OR engineTemperature is above 3500 OR engineIndicatorLight is red blinking print "ENGINE FAILURE IMMINENT!"
-
-f) Otherwise, print "Fuel and engine status pending..." */
-
-// Code 5a - 5f hered
-
+// Checks if indicator checks are ready for launch, returns the system message to communicate to the launch program
 function getLaunchSysMessage(fuelLevel, engineTemperature, engineIndicatorLight) {
   if (fuelLevel < 1000 || engineTemperature > 3500 || engineIndicatorLight === "red blinking") {
     return "ENGINE FAILURE IMMINENT!";
@@ -38,47 +23,45 @@ function getLaunchSysMessage(fuelLevel, engineTemperature, engineIndicatorLight)
   }
 }
 
+// Checks if shuttle is cleared for launch, if all indicators checks are good or if override is activated, shuttle is good for launch
+function getLaunchStatus(commandOverride) {
+  let launchSysMessage;
+  launchSysMessage = getLaunchSysMessage(fuelLevel, engineTemperature, engineIndicatorLight);
 
-function getLaunchStatus(overrideActivated) {
-  if (overrideActivated) {
-    return "launch!!!";
+  if ((fuelLevel > 20000 && engineIndicatorLight !== "red blinking") || commandOverride) {
+    return [launchSysMessage, "Cleared to launch!"];
   } else {
-    launchSysMessage = getLaunchSysMessage(fuelLevel, engineTemperature, engineIndicatorLight);
-    if launchSysMessage === "Check fuel level. Engines running hot." {
-      return "launch!!!";
-
-    }
+    return [launchSysMessage, "Launch scrubbed"];
   }
 } 
 
-// 6) a) Create the variable commandOverride, and set it to be true or false. If commandOverride is false, then the shuttle should only launch if the fuel and engine check are OK. If commandOverride is true, then the shuttle will launch regardless of the fuel and engine status.
+// Asks user if they want to activate commandOverride, if yes, return true; if no, return false
+function getCommandOverride() {
+  let user_choice = input.question("Do you want to activate the launch command override key? y / n ? ").toLowerCase();
 
-// main
-console.log("Launch Check Program Activated!!!");
-let cmdOverrideChoice = input.question("Do you want to activate command overide? ").toLowerCase();
-// console.log(cmdOverrideChoice)
-
-if (cmdOverrideChoice === "yes") {
-  // console.log("yes");
-  launchStatus = getLaunchStatus(true);
-} else {
-  // console.log("no");
-  launchStatus = getLaunchStatus(false);
+  if (user_choice === "yes" || user_choice === "y") {
+    console.log("Override Activated!");
+    return true;
+  } else {
+    return false;
+  }
 }
-// launchStatus = launchCheck(fuelLevel, engineTemperature, engineIndicatorLight);
 
+// Program Start //
+console.log("Starting Boot Process...");
+console.log("Welcome to the Launch Initiation Status Program (LISP)");
+commandOverride = getCommandOverride();
+console.log();
+
+let [sysMessage, launchStatus] = getLaunchStatus(commandOverride);
+
+console.log(sysMessage);
 console.log(launchStatus);
-// next, We need to figure out how to encapsulate this into an if statement for overrides
-
-
-
-
-
 
 
 /*
 
-//// NEW PROGRAM BUILD BLUEPRINT \\\\
+//// PROGRAM BUILD BLUEPRINT \\\\
 
 command console boot
 cmd con welcome msg
@@ -91,7 +74,4 @@ init launch(key = y/n)
 
 
 
-
-/* 6) b) Code the following if/else check:
-If fuelLevel is above 20000 AND engineIndicatorLight is NOT red blinking OR commandOverride is true print "Cleared to launch!" Else print "Launch scrubbed!" */
 
